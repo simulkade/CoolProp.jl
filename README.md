@@ -10,4 +10,4 @@ Pkg.build("CoolProp") # to download the binaries
 ```
 
 ## Note
-The installer downloads libraries for other operating systems as well. I don't know how to fix it, right now.
+The installer downloads libraries only for 64 bit operating systems. I have tested it on my Linux machine and it works fine. Please let me know if it does not work for you. As an alternative, you can download the binaries for your OS from [here](https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/)
