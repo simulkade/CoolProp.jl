@@ -7,7 +7,7 @@ if is_linux()
   end
 elseif is_windows()
   lib_coolprop_path=joinpath(Pkg.dir(), "CoolProp", "deps", "libCoolProp.dll")
-  if !isfile()
+  if !isfile(lib_coolprop_path)
     readall(`curl -L -o $lib_coolprop_path  https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/Windows/64bit/libCoolProp.dll/download`)
   end
 elseif is_apple()
