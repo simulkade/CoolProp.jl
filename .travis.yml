@@ -1,0 +1,7 @@
+language: julia
+julia:
+  - release
+  - nightly
+os :
+  - linux
+  - osx

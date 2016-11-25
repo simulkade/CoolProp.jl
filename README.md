@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DANA-Laboratory/CoolProp.jl.svg?branch=master)](https://travis-ci.org/DANA-Laboratory/CoolProp.jl)
+
 # JCoolprop
 A Julia wrapper for CoolProp (http://www.coolprop.org)
 
@@ -6,7 +8,7 @@ This is not my work, and all the credit goes to the cool [CoolProp contributors]
 ## Installation
 ```julia
 Pkg.clone("https://github.com/simulkade/CoolProp.jl.git")
-Pkg.build("CoolProp") # to download the binaries 
+Pkg.build("CoolProp") # to download the binaries
 ```
 
 ## Note
