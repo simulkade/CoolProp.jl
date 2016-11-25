@@ -1,25 +1,33 @@
-# download the binaries from sourceforge
-using BinDeps
-if is_linux()
-  lib_coolprop_path=joinpath(Pkg.dir(), "CoolProp", "deps", "libCoolProp.so")
-  if !isfile(lib_coolprop_path)
-    info("libCoolProp.so does not exist. Downloading the library from source forge...")
-    download("https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/Linux/64bit/libCoolProp.so.6.1.0/download", 
-    lib_coolprop_path)
+import JSON
+const OS_ARCH_CoolProp = (Sys.WORD_SIZE == 64) ? "64bit" : "32bit__cdecl";
+const srcpath = abspath(joinpath(@__FILE__,"..","..","src"));
+const destpathbase = abspath(joinpath(@__FILE__,".."));
+latestVersion_CoolProp = "";
+_download(s, d) = isfile(d) ? throw("file exists ...") : begin
+  info("Downloading $s => $d .")
+  download(s, d);
+  info("Done.");
+end
+try
+  latestVersion_CoolProp = JSON.parse(readstring(download("https://sourceforge.net/projects/coolprop/best_release.json")))["release"]["filename"][11:15];
+  println("CoolProp latestVersion = $latestVersion_CoolProp ...")
+  coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/$latestVersion_CoolProp/";
+  _download(coolpropurlbase * "Julia/CoolProp.jl", joinpath(srcpath, "CoolProp.jl"));
+  info("I'm Getting CoolProp Binaries...");
+  @static if is_windows()
+    urlbase = coolpropurlbase * "shared_library/Windows/$OS_ARCH_CoolProp/";
+    _download(joinpath(urlbase,"CoolProp.dll"), joinpath(destpathbase,"libCoolProp.dll"));
+    _download(joinpath(urlbase,"CoolProp.lib"), joinpath(destpathbase,"libCoolProp.lib"));
+    _download(joinpath(urlbase,"exports.txt"), joinpath(destpathbase,"exports.txt"));
   end
-elseif is_windows()
-  lib_coolprop_path=joinpath(Pkg.dir(), "CoolProp", "deps", "libCoolProp.dll")
-  if !isfile(lib_coolprop_path)
-    info("libCoolProp.dll does not exist. Downloading the library from source forge...")
-    #readall(`curl -L -o $lib_coolprop_path  https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/Windows/64bit/libCoolProp.dll/download`)
-    lib_coolprop_win_url="https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/Windows/64bit/libCoolProp.dll/download"
-    readall(BinDeps.download_cmd(lib_coolprop_win_url, lib_coolprop_path))
+  @static if is_linux()
+    urlbase = coolpropurlbase * "shared_library/Linux/64bit/libCoolProp.so.$latestVersion_CoolProp";
+    _download(urlbase, joinpath(destpathbase,"libCoolProp.so"));
   end
-elseif is_apple()
-  lib_coolprop_path=joinpath(Pkg.dir(), "CoolProp", "deps", "libCoolProp.dylib")
-  if !isfile(lib_coolprop_path)
-    info("libCoolProp.dylib does not exist. Downloading the library from source forge...")
-    download("https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/Darwin/64bit/libCoolProp.dylib/download", 
-    lib_coolprop_path)
+  @static if is_apple()
+    urlbase = coolpropurlbase * "shared_library/Darwin/64bit/libCoolProp.dylib.$latestVersion_CoolProp";
+    _download(urlbase, joinpath(destpathbase,"libCoolProp.dylib"));
   end
+catch err
+  println("Build error: $err")
 end
