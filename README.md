@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/DANA-Laboratory/CoolProp.jl.svg?branch=master)](https://travis-ci.org/DANA-Laboratory/CoolProp.jl)
 
-# JCoolprop
+# Note
+This repository is not maitained anymore. Please use [this package](https://github.com/vimalaad/CoolProp.jl) to call CoolProp from Julia.
+
+# CoolProp.jl
 A Julia wrapper for CoolProp (http://www.coolprop.org)
 
 This is not my work, and all the credit goes to the cool [CoolProp contributors](https://github.com/CoolProp/CoolProp/graphs/contributors). I only put this together to make things easier for a friend of mine.  
